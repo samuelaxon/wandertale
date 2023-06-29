@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Background
+  - DisplayText
+  - InteractableText
+  - Exit Text
+  - Mob Text
+  - Static Text
   layers:
   - Default
   - TransparentFX
@@ -13,9 +19,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - Background
+  - DisplayText
+  - Map
   - 
   - 
   - 
@@ -40,4 +46,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: DisplayText
+    uniqueID: 2509021985
+    locked: 0
+  - name: Background
+    uniqueID: 3209897621
     locked: 0
