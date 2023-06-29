@@ -4,7 +4,6 @@ using UnityEngine;
 using Ink.Runtime;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.Video;
 
 public class InkController : MonoBehaviour
 {
@@ -12,24 +11,32 @@ public class InkController : MonoBehaviour
     [HideInInspector] public TextAsset inkJSON;
 
     public Story story;
-
-    // UI variables
-    public TMP_Text storyTextPrefab;
-    public Button storyButtonPrefab;
-    public GameObject storyBackgroundPrefab;
     public GameObject sceneCamera;
-    private Camera sceneCameraComponent;
-    public TMP_FontAsset storyChoiceFont;
-
-    // Other variables
     public GameController controller;
     [HideInInspector] public bool isStoryLoaded = false;
     [HideInInspector] public int isStoryDone = 0;
-    private string lastStoryLoaded;
+    public string lastStoryLoaded;
+
+    public Room templeOfIdeasLandingPage;
+    public Room artistLandingPage;
+    public Room mnemosyneLobby;
+
+    // UI
+    public TMP_Text storyTextPrefab;
+    public Button storyChoicePrefab;
+    public GameObject storyTextPanel;
+    public GameObject storyChoicePanel;
+    public TMP_FontAsset storyChoiceFont;
+
+    public TMP_Text craftingTextPrefab;
+    public Button craftingChoicePrefab;
+    public GameObject craftingTextPanel;
+    public GameObject craftingChoicePanel;
+    public TMP_FontAsset craftingChoiceFont;
 
     private void Awake()
     {
-        Debug.Log("InkController woke up.");
+        Debug.Log("InkController.Awake(): InkController woke up.");
         controller = GetComponent<GameController>();
     }
 
@@ -55,7 +62,7 @@ public class InkController : MonoBehaviour
     // Loads a new Ink story when called.
     public void LoadStory(string storyKeyToLoad)
     {
-        Debug.Log("InkController/LoadStory() was called.");
+        Debug.Log("InkController.LoadStory() was called.");
 
         if (controller.roomNavigation.mobOrStaticStoryDictionary.ContainsKey(storyKeyToLoad))
         {
@@ -77,34 +84,68 @@ public class InkController : MonoBehaviour
         }
         else
         {
-            Debug.Log("InkController/LoadStory(): No story found in relevant dictionaries, so no story was loaded.");
+            Debug.Log("InkController.LoadStory(): No story found in relevant dictionaries, so no story was loaded.");
         }
     }
 
     // Unloads the story and updates universal variables based on the story when it ends.
     public void UnloadStory()
     {
-        Debug.Log("InkController/UnloadStory() was called.");
+        Debug.Log("InkController.UnloadStory() was called.");
         controller.variableTracker.UpdateVariablesFromStoryEnd();
 
-        controller.variableTracker.UpdateFoundStatics(); // SLEUTH: If the player found the weapon, key, or body this conversation, adds them to a list of statics to exclude when displaying the room.
+        EraseUI();
 
-        // SLEUTH: Fades the music in and out at certain points in the game.
+        // Fades the music in and out at certain points in the game. Should probably move this to a function in SFXController.
         if (lastStoryLoaded == "StartGame")
         {
-            StartCoroutine(controller.sfxController.StartingFade());
-        }
-        else if (lastStoryLoaded == "EndGameAccuse")
-        {
-            StartCoroutine(controller.sfxController.EndingFade());
+            // StartCoroutine(controller.sfxController.StartingFade());
         }
 
         if (controller.variableTracker.gameEnd == 1)
         {
-            Debug.Log("InkController/UnloadStory(): Game ending because gameEnd == 1.");
-
+            Debug.Log("InkController.UnloadStory(): Game ending because gameEnd == 1.");
             controller.CanvasModeSwitch("end");
-            // sfxController.StopSFX(); Disabled because we're not using this in this project yet.
+        }
+        else if (lastStoryLoaded == "Gloria0" || lastStoryLoaded == "Gloria1" || lastStoryLoaded == "Gloria2")
+        {
+            Debug.Log("InkController.UnloadStory(): Ended NPC conversation, going to exploration area.");
+
+            controller.roomNavigation.currentRoom = templeOfIdeasLandingPage;
+            controller.CanvasModeSwitch("room");
+        }
+        else if (lastStoryLoaded == "Julian0" || lastStoryLoaded == "Julian1" || lastStoryLoaded == "Julian2")
+        {
+            Debug.Log("InkController.UnloadStory(): Ended NPC conversation, going to exploration area.");
+
+            controller.roomNavigation.currentRoom = templeOfIdeasLandingPage;
+            controller.CanvasModeSwitch("room");
+        }
+        else if (lastStoryLoaded == "Li0" || lastStoryLoaded == "Li1" || lastStoryLoaded == "Li2")
+        {
+            Debug.Log("InkController.UnloadStory(): Ended NPC conversation, going to exploration area.");
+
+            controller.roomNavigation.currentRoom = templeOfIdeasLandingPage;
+            controller.CanvasModeSwitch("room");
+        }
+        else if (controller.variableTracker.tookItem == 1)
+        {
+            controller.variableTracker.tookItem = 0;
+
+            if (controller.inventory.inventory.Count == 9)
+            {
+                controller.CanvasModeSwitch("crafting");
+            }
+            else
+            {
+                controller.roomNavigation.currentRoom = artistLandingPage;
+                controller.CanvasModeSwitch("room");
+            }
+        }
+        else if (controller.dossier.gloria.mobState == 5 && controller.dossier.julian.mobState == 5 && controller.dossier.li.mobState == 5)
+        {
+            controller.roomNavigation.currentRoom = mnemosyneLobby;
+            controller.CanvasModeSwitch("room");
         }
         else
         {
@@ -113,78 +154,134 @@ public class InkController : MonoBehaviour
 
         isStoryLoaded = false;
         story = null;
-        EraseUI();
     }
 
     // Populates the text and button prefabs with concents from the Ink story. Also, handles clicking to make a choice in Ink stories.
-    void RefreshUI()
+    public void RefreshUI()
     {
-        Debug.Log("InkController's RefreshUI was called.");
+        Debug.Log("InkController.RefreshUI() was called.");
 
         EraseUI();
-        GameObject storyBackground = Instantiate(storyBackgroundPrefab);
-        storyBackground.transform.SetParent(controller.storyCanvas.transform, false);
-        /* Temporarily disabling this since there is no longer a video player here in Sleuth.
-        VideoPlayer storyBackgroundVideo = storyBackground.GetComponent<VideoPlayer>();
-        sceneCameraComponent = sceneCamera.GetComponent<Camera>();
-        storyBackgroundVideo.targetCamera = sceneCameraComponent;
-        storyBackgroundVideo.Play();
-        */
-        TMP_Text storyText = Instantiate(storyTextPrefab);
-        storyText.text = LoadStoryChunk();
-        storyText.transform.SetParent(controller.storyCanvas.transform, false);
-        storyText.fontSize = 20;
-        storyText.paragraphSpacing = 40;
 
-        controller.variableTracker.CheckToPlayDiscoveryAudio(); // SLEUTH
-
-        foreach (Choice choice in story.currentChoices)
+        if (controller.canvasState == "story")
         {
-            Button storyButton = Instantiate(storyButtonPrefab);
-            storyButton.transform.SetParent(controller.storyCanvas.transform, false);
+            TMP_Text storyText = Instantiate(storyTextPrefab);
+            storyText.text = LoadStoryChunk();
+            storyText.fontSize = 24;
+            storyText.paragraphSpacing = 40;
+            storyText.transform.SetParent(storyTextPanel.transform, false);
 
-            TMP_Text storyChoiceText = storyButton.GetComponentInChildren<TMP_Text>();
-            storyChoiceText.font = storyChoiceFont;
-            storyChoiceText.fontSize = 20;
-            storyChoiceText.color = Color.white;
-            storyChoiceText.text = choice.text;
-
-            storyButton.onClick.AddListener(delegate
+            foreach (Choice choice in story.currentChoices)
             {
-                Debug.Log("A story choice was clicked.");
-                ChooseStoryChoice(choice);
-            });
+                Button storyButton = Instantiate(storyChoicePrefab);
+
+                Image storyButtonImage;
+                storyButtonImage = storyButton.GetComponent<Image>();
+
+                TMP_Text storyChoiceText = storyButton.GetComponentInChildren<TMP_Text>();
+                storyChoiceText.transform.SetParent(storyButton.transform, false);
+                storyChoiceText.font = storyChoiceFont;
+                storyChoiceText.fontSize = 30;
+                storyChoiceText.color = new Color32(13, 94, 175, 255);
+                storyChoiceText.text = choice.text;
+                storyButton.transform.SetParent(storyChoicePanel.transform, false);
+                storyButtonImage.enabled = !storyButtonImage.enabled;
+
+                storyButton.onClick.AddListener(delegate
+                {
+                    Debug.Log("A story choice was clicked with value " + choice);
+                    ChooseStoryChoice(choice);
+                });
+            }
         }
+        else if (controller.canvasState == "crafting")
+        {
+            TMP_Text craftingText = Instantiate(craftingTextPrefab);
+            craftingText.text = LoadStoryChunk();
+            craftingText.fontSize = 24;
+            craftingText.paragraphSpacing = 40;
+            craftingText.transform.SetParent(craftingTextPanel.transform, false);
+
+            foreach (Choice choice in story.currentChoices)
+            {
+                Button craftingButton = Instantiate(craftingChoicePrefab);
+
+                Image craftingButtonImage;
+                craftingButtonImage = craftingButton.GetComponent<Image>();
+
+                TMP_Text craftingChoiceText = craftingButton.GetComponentInChildren<TMP_Text>();
+                craftingChoiceText.transform.SetParent(craftingButton.transform, false);
+                craftingChoiceText.font = craftingChoiceFont;
+                craftingChoiceText.fontSize = 30;
+                craftingChoiceText.color = new Color32(13, 94, 175, 255);
+                craftingChoiceText.text = choice.text;
+
+                craftingButton.transform.SetParent(craftingChoicePanel.transform, false);
+                craftingButtonImage.enabled = craftingButtonImage.enabled;
+
+                craftingButton.onClick.AddListener(delegate
+                {
+                    Debug.Log("A story choice was clicked with value " + choice);
+                    ChooseStoryChoice(choice);
+                });
+            }
+        }
+
+        // controller.StartInteractablesFade();
+
+        // controller.variableTracker.CheckToPlayDiscoveryAudio(); // SLEUTH
+
+        controller.dossier.UpdateHintsFromInk();
+        controller.dossier.UpdateDossier();
+        controller.inventory.CollectStatic();
     }
 
     // Clears the UI so it can be replaced with an updated one when the story state changes.
     void EraseUI()
     {
-        Debug.Log("InkController's EraseUI was called.");
-        for (int i = 0; i < controller.storyCanvas.transform.childCount; i++)
+        Debug.Log("InkController.EraseUI() was called.");
+
+        if (controller.canvasState == "story")
         {
-            Destroy(controller.storyCanvas.transform.GetChild(i).gameObject);
+            for (int i = 0; i < storyTextPanel.transform.childCount; i++)
+            {
+                Destroy(storyTextPanel.transform.GetChild(i).gameObject);
+            }
+            for (int i = 0; i < storyChoicePanel.transform.childCount; i++)
+            {
+                Destroy(storyChoicePanel.transform.GetChild(i).gameObject);
+            }
+        }
+        else if (controller.canvasState == "crafting")
+        {
+            for (int i = 0; i < craftingTextPanel.transform.childCount; i++)
+            {
+                Destroy(craftingTextPanel.transform.GetChild(i).gameObject);
+            }
+            for (int i = 0; i < craftingChoicePanel.transform.childCount; i++)
+            {
+                Destroy(craftingChoicePanel.transform.GetChild(i).gameObject);
+            }
         }
     }
 
     // Moves the story forward after the user clicks on a choice (which is handled in refreshUI).
     void ChooseStoryChoice(Choice choice)
     {
-        Debug.Log("InkController's ChooseStoryChoice was called.");
+        Debug.Log("InkController.ChooseStoryChoice() was called.");
         story.ChooseChoiceIndex(choice.index);
-
         RefreshUI();
     }
 
     // Checks if there is more of the story to load, and if so, loads it and returns the text.
     string LoadStoryChunk()
     {
-        Debug.Log("InkController's LoadStoryChunk was called.");
+        Debug.Log("InkController.LoadStoryChunk() was called.");
         string text = "";
 
         if(story.canContinue)
         {
-            Debug.Log("InkController's LoadStoryChunk says the story can continue.");
+            Debug.Log("InkController.LoadStoryChunk(): The story can continue.");
             text = story.ContinueMaximally();
         }
 

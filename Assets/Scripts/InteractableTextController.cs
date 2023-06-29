@@ -4,18 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using Ink.Runtime;
 
 public class InteractableTextController : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [HideInInspector] public GameController controller;
     [HideInInspector] public bool hasStory;
 
-    public TMP_FontAsset hoverFont;
-    private TMP_FontAsset startingFont;
-
     private void Awake()
     {
         Debug.Log("InteractableTextController for + " + name + " woke up.");
+        controller = GetComponent<GameController>(); // Allows this script to access things from the GameController.
     }
 
     // Makes text styling changes to interactable text objects when mouse hovers.
@@ -25,13 +24,11 @@ public class InteractableTextController : MonoBehaviour, IPointerClickHandler, I
 
         TMP_Text interactableText = gameObject.GetComponent<TMP_Text>();
 
-        startingFont = interactableText.font;
+        Debug.Log("InteractableTextController/OnPointerEnter(): FontStyle for " + gameObject + "starts as " + interactableText.fontStyle);
 
-        Debug.Log("InteractableTextController/OnPointerEnter(): Font for " + gameObject + "starts as " + interactableText.font);
+        interactableText.fontStyle = FontStyles.Bold;
 
-        interactableText.font = hoverFont;
-
-        Debug.Log("InteractableTextController/OnPointerEnter(): Font for " + gameObject + "ends as " + interactableText.font);
+        Debug.Log("InteractableTextController/OnPointerEnter(): FontStyle for " + gameObject + "ends as " + interactableText.fontStyle);
     }
 
     // Reverses text styling changes to interactable text objects when mouse stops hovering.
@@ -41,30 +38,24 @@ public class InteractableTextController : MonoBehaviour, IPointerClickHandler, I
 
         TMP_Text interactableText = gameObject.GetComponent<TMP_Text>();
 
-        Debug.Log("InteractableTextController/OnPointerExit(): Font for " + gameObject + "starts as " + interactableText.font);
+        Debug.Log("InteractableTextController/OnPointerExit(): FontStyle for " + gameObject + "starts as " + interactableText.fontStyle);
 
-        interactableText.font = startingFont;
+        interactableText.fontStyle = FontStyles.Normal;
 
-        Debug.Log("InteractableTextController/OnPointerExit(): Font for " + gameObject + "ends as " + interactableText.font);
+        Debug.Log("InteractableTextController/OnPointerExit(): FontStyle for " + gameObject + "ends as " + interactableText.fontStyle);
     }
 
     // When an interactable text object is clicked, checks if it is an exit or a story and either calls function to change rooms or calls functions to load a story.
     public void OnPointerClick(PointerEventData eventData)
     {
-        // TEMP
-        controller.variableTracker.DebugBody();
-
         Debug.Log("InteractableTextController/OnPointerClick() was called for exit key " + name);
 
-        // SLEUTH: Specific to this project.
         if (CompareTag("Exit Text"))
         {
-            controller.variableTracker.priorDangerStage = controller.variableTracker.playerDangerStage; // SLEUTH
             controller.roomNavigation.AttemptToChangeRooms(name); // Attempt to change rooms, passing the name of this object as the key with which to choose a room.
         }
         else if (hasStory == true)
         {
-            controller.variableTracker.UpdateDangerLevel("story"); // SLEUTH
             controller.CanvasModeSwitch("story");
             controller.inkController.LoadStory(name);
         }

@@ -10,7 +10,7 @@ namespace TMPro.Examples
 
 
         //[Range(0, 100)]
-        public int RevealSpeed = 200;
+        public float revealSpeed = 0.02f;
 
         // private string label01 = "Example <sprite=2> of using <sprite=7> <#ffa000>Graphics Inline</color> <sprite=5> with Text in <font=\"Bangers SDF\" material=\"Bangers SDF - Drop Shadow\">TextMesh<#40a0ff>Pro</color></font><sprite=0> and Unity<sprite=1>";
         // private string label02 = "Example <sprite=2> of using <sprite=7> <#ffa000>Graphics Inline</color> <sprite=5> with Text in <font=\"Bangers SDF\" material=\"Bangers SDF - Drop Shadow\">TextMesh<#40a0ff>Pro</color></font><sprite=0> and Unity<sprite=2>";
@@ -25,7 +25,7 @@ namespace TMPro.Examples
             m_textMeshPro = GetComponent<TMP_Text>();
             // m_textMeshPro.text = label01;
             m_textMeshPro.enableWordWrapping = true;
-            m_textMeshPro.alignment = TextAlignmentOptions.Top;
+            // m_textMeshPro.alignment = TextAlignmentOptions.Top;
 
 
 
@@ -39,12 +39,9 @@ namespace TMPro.Examples
             //    gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(500, 300);
             //    m_textMeshPro.fontSize = 48;
             //}
-
-
         }
 
-
-        IEnumerator Start()
+        public IEnumerator Start()
         {
 
             // Force and update of the mesh to get valid information.
@@ -64,7 +61,8 @@ namespace TMPro.Examples
                 // Once the last character has been revealed, wait 1.0 second and start over.
                 if (visibleCount >= totalVisibleCharacters)
                 {
-                    yield return new WaitForSeconds(1.0f);
+                    yield break;
+                    // yield return new WaitForSeconds(1.0f);
                     //m_textMeshPro.text = label02;
                     //yield return new WaitForSeconds(1.0f);
                     //m_textMeshPro.text = label01;
@@ -72,16 +70,15 @@ namespace TMPro.Examples
                 }
                 else
                 {
-                    Debug.Log("Were done printing characters.");
+                    // Debug.Log("Were done printing characters.");
                 }
 
                 counter += 1;
 
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(revealSpeed);
             }
 
             //Debug.Log("Done revealing the text.");
         }
-
     }
 }

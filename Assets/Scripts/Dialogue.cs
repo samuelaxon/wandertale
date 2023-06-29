@@ -10,7 +10,6 @@ public class Dialogue
 
     public TextAsset valueStory; // The room the exit points to, configurable by the content creator.
 
-    public Room roomAssignment;
     [TextArea]
     public string dialogueDescription; // The description of the exit visible to the player and configurable by the content creator.
 }

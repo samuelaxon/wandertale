@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SFXController : MonoBehaviour
-{
+{/*
     public GameController controller;
     public GameObject titleAudio;
-    public GameObject bgfxAudio;
-    public GameObject discoveryAudio;
+    public GameObject scryAudio;
+    public GameObject dossierAudio;
 
     private AudioSource title;
     private AudioSource bgfx;
-    private AudioSource discovery;
+    private AudioSource dossier;
+    private AudioSource scry;
 
     public float fadeOutSpeed;
 
@@ -20,8 +21,8 @@ public class SFXController : MonoBehaviour
         controller = GetComponent<GameController>();
 
         title = titleAudio.GetComponent<AudioSource>();
-        bgfx = bgfxAudio.GetComponent<AudioSource>();
-        discovery = discoveryAudio.GetComponent<AudioSource>();
+        // bgfx = bgfxAudio.GetComponent<AudioSource>();
+        dossier = dossierAudio.GetComponent<AudioSource>();
     }
 
     public void PlaySFX(string soundToPlay) // Plays a sound effect. The sound effect is determined by the string passed as an argument.
@@ -33,15 +34,15 @@ public class SFXController : MonoBehaviour
             Debug.Log("SFXController/PlaySFX: Playing AudioSource title.");
             title.Play();
         }
-        else if (soundToPlay == "bgfx")
-        {
-            Debug.Log("SFXController/PlaySFX: Playing AudioSource bgfx.");
-            bgfx.Play();
-        }
-        else if (soundToPlay == "discovery")
+        else if (soundToPlay == "dossier")
         {
             Debug.Log("SFXController/PlaySFX: Playing AudioSource discovery.");
-            discovery.Play();
+            dossier.Play();
+        }
+        else if (soundToPlay == "scry")
+        {
+            Debug.Log("SFXController/PlaySFX: Playing AudioSource discovery.");
+            scry.Play();
         }
         else
         {
@@ -66,7 +67,7 @@ public class SFXController : MonoBehaviour
         else if (soundToStop == "discovery")
         {
             Debug.Log("SFXController/PlaySFX: Stopping AudioSource discovery.");
-            discovery.Stop();
+            // discovery.Stop();
         }
         else
         {
@@ -116,7 +117,7 @@ public class SFXController : MonoBehaviour
         }
     }
 
-    public IEnumerator StartingFade() // SLEUTH: Called to transition the background audio from the title screen to gameplay.
+    public IEnumerator StartingFade() // Called to transition the background audio from the title screen to gameplay.
     {
         float titleStartVolume = title.volume;
 
@@ -132,7 +133,7 @@ public class SFXController : MonoBehaviour
         PlaySFX("bgfx");
     }
 
-    public IEnumerator EndingFade() // SLEUTH: Called to transition the background audio from gameplay to the title screen.
+    public IEnumerator EndingFade() // Called to transition the background audio from gameplay to the title screen.
     {
         float bgfxStartVolume = bgfx.volume;
 
@@ -146,5 +147,5 @@ public class SFXController : MonoBehaviour
         bgfx.Stop();
         bgfx.volume = bgfxStartVolume;
         PlaySFX("title");
-    }
+    }*/
 }
