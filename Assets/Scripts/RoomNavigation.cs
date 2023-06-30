@@ -77,37 +77,14 @@ public class RoomNavigation : MonoBehaviour
 
                 TMP_Text interactableText = Instantiate(interactableTextPrefab); // Creates a text object to correspond to the mob story description.
 
-                if (currentRoom.mobs[i].mobName == "Mnemosyne")
-                {
-                    interactableText.name = "MnemosyneInteractableText"; // Renames this text object so it is identifiable as associated with this mob.
-                }
-                else
-                {
-                    interactableText.name = currentRoom.mobs[i].mobStories[currentRoom.mobs[i].mobState].valueStory.name; // Renames this text object so it is identifiable as associated with this mob.
-                }
-                
+                interactableText.name = currentRoom.mobs[i].mobStories[currentRoom.mobs[i].mobState].valueStory.name; // Renames this text object so it is identifiable as associated with this mob.
                 interactableText.tag = "Mob Text";
                 interactableText.transform.SetParent(controller.interactablesPanel.transform, false); // Sets the panel as a parent so these UI elements are automatically sorted properly in the viewport.
                 interactableText.GetComponent<InteractableTextController>().controller = controller; // Tells the new text object how to find the GameController.
                 interactableText.GetComponent<InteractableTextController>().hasStory = true; // Sets the variable for whether this object a story to load so InteractableTextController knows whether to load one on click.
+                interactableText.text = currentRoom.mobs[i].mobStories[currentRoom.mobs[i].mobState].dialogueDescription; // Sets the text's contents to be equal to the relevant mob description.
 
-                if (currentRoom.mobs[i].mobName == "Mnemosyne")
-                {
-                    interactableText.text = "Go to the lobby";
-                }
-                else
-                {
-                    interactableText.text = currentRoom.mobs[i].mobStories[currentRoom.mobs[i].mobState].dialogueDescription; // Sets the text's contents to be equal to the relevant mob description.
-                }
-
-                if (currentRoom.mobs[i].mobName == "Mnemosyne")
-                {
-                    mobOrStaticStoryDictionary.Add(interactableText.name, finalStory); // Stores this text object as the key and the associated mob story as a value.
-                }
-                else
-                {
-                    mobOrStaticStoryDictionary.Add(interactableText.name, currentRoom.mobs[i].mobStories[currentRoom.mobs[i].mobState].valueStory); // Stores this text object as the key and the associated mob story as a value.
-                }
+                mobOrStaticStoryDictionary.Add(interactableText.name, currentRoom.mobs[i].mobStories[currentRoom.mobs[i].mobState].valueStory); // Stores this text object as the key and the associated mob story as a value.
 
                 Debug.Log("RoomNavigation.UnpackMobsInRoom(): A new text object has been instantiated from " + currentRoom.mobs[i].name + " for mobState " + currentRoom.mobs[i].mobState + " and it's named " + interactableText.name);
             }
@@ -121,22 +98,11 @@ public class RoomNavigation : MonoBehaviour
                 interactableText.transform.SetParent(controller.interactablesPanel.transform, false); // Sets the panel as a parent so these UI elements are automatically sorted properly in the viewport.
                 interactableText.GetComponent<InteractableTextController>().controller = controller; // Tells the new text object how to find the GameController.
                 interactableText.GetComponent<InteractableTextController>().hasStory = false; // Sets the variable for whether this object a story to load so InteractableTextController knows whether to load one on click.
-
-
                 interactableText.text = currentRoom.mobs[i].mobDescription; // Sets the text's contents to be equal to the relevant mob description.
 
                 Debug.Log("RoomNavigation.UnpackMobsInRoom(): A new text object has been instantiated from " + currentRoom.mobs[i].name + " for no mobState and it's named " + interactableText.name);
             }
         }
-
-        /*
-        if (mobOrStaticStoryDictionary.Count > 0)
-        {
-            foreach (KeyValuePair<string, TextAsset> kvp in mobOrStaticStoryDictionary)
-            {
-                Debug.Log("RoomNavigation.UnpackMobsInRoom(): mobOrStaticStoryDictionary includes key " + kvp.Key + " and value " + kvp.Value.name);
-            }
-        }*/
     }
 
     // Sorts through the statics assigned to a room in the editor, and creates interactable text objects to display on the screen to indicate their presence.

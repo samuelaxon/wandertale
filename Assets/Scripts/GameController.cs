@@ -16,27 +16,20 @@ public class GameController : MonoBehaviour
     public Canvas storyCanvas; // The UI for the Ink story dialogue mode.
     public Canvas menuCanvas; // The UI for the menu.
     public Canvas endCanvas; // The UI for the kill screen.
-    public Canvas craftingCanvas; // The UI for the crafting menu.
     public Canvas inventoryCanvas;
-    public Canvas dossierCanvas;
     public GameObject interactablesPanel;
     public GameObject storyChoicePanel;
-    public GameObject craftingChoicePanel;
 
     public float fadeSpeed;
 
     public string previousCanvasState; // Stores a canvas state to return to later.
     public string canvasState; // The current mode the canvas is in (story, room, etc).
-    public bool wasCrafting;
     public int gameHasStarted = 0; // Has the game started? 0 for no, 1 for yes.
 
     [HideInInspector] public RoomNavigation roomNavigation; // A reference to roomNavigation for knowing which room we're in.
     [HideInInspector] public InkController inkController; // A reference to inkController so various scripts can communicate and work with Ink stories.
     [HideInInspector] public VariableTracker variableTracker; // A reference to variable tracker so various scripts can access, use, and define the variables.
-    // [HideInInspector] public SFXController sfxController; // A reference to the script that plays and stops sound effects and music. Disabled for SLEUTH.
     [HideInInspector] public Inventory inventory;
-    [HideInInspector] public Dossier dossier;
-    [HideInInspector] public Crafting crafting;
 
     List<string> roomLog = new List<string>(); // Creates a List of strings called room log that will go to the text field.
 
@@ -47,10 +40,7 @@ public class GameController : MonoBehaviour
         roomNavigation = GetComponent<RoomNavigation>();
         inkController = GetComponent<InkController>();
         variableTracker = GetComponent<VariableTracker>();
-        // sfxController = GetComponent<SFXController>();
         inventory = GetComponent<Inventory>();
-        dossier = GetComponent<Dossier>();
-        crafting = GetComponent<Crafting>();
     }
 
     private void Update()
@@ -67,26 +57,11 @@ public class GameController : MonoBehaviour
                 CanvasModeSwitch("story");
                 inkController.LoadStory("Mnemosyne0");
 
-
-                /* Enable if we start with crafting, not the room or story view, for testing only. 555
-                CanvasModeSwitch("crafting");
-                inkController.LoadStory("StartGame");*/
-
                 /* Enable if we start with a room, not the story view.
-                sfxController.PlaySFX();
                 CanvasModeSwitch("room");
                 */
             }
         }
-
-        /* Ends the game if a story calls for it. Disabled temporarily because we moved it to InkController.
-        if (variableTracker.gameEnd == 1)
-        {
-            Debug.Log("GameController/Update(): Game ending because gameEnd == 1.");
-
-            CanvasModeSwitch("end");
-            // sfxController.StopSFX(); Disabled because we're not using this in this project yet.
-        }*/
     }
 
     // Switches between Story and Room canvas with SetActive. Note for later: Make this into custom enum parameters instead of arbitrary string ones.
@@ -101,7 +76,6 @@ public class GameController : MonoBehaviour
             storyCanvas.gameObject.SetActive(true);
             roomCanvas.gameObject.SetActive(false);
             menuCanvas.gameObject.SetActive(false);
-            craftingCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(false);
         }
         else if (canvasMode == "room")
@@ -112,7 +86,6 @@ public class GameController : MonoBehaviour
             roomCanvas.gameObject.SetActive(true);
             storyCanvas.gameObject.SetActive(false);
             menuCanvas.gameObject.SetActive(false);
-            craftingCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(false);
 
             // Tells buttons about the controller when they become active at this point.
@@ -128,38 +101,8 @@ public class GameController : MonoBehaviour
             menuCanvas.gameObject.SetActive(true);
             roomCanvas.gameObject.SetActive(false);
             storyCanvas.gameObject.SetActive(false);
-            craftingCanvas.gameObject.SetActive(false);
             inventoryCanvas.gameObject.SetActive(false);
-            dossierCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(false);
-        }
-        else if (canvasMode == "crafting")
-        {
-            canvasState = "crafting";
-            Debug.Log("GameController.CanvasModeSwitch: The canvas mode parameter was recognized as crafting.");
-
-            craftingCanvas.gameObject.SetActive(true);
-            menuCanvas.gameObject.SetActive(false);
-            roomCanvas.gameObject.SetActive(false);
-            storyCanvas.gameObject.SetActive(false);
-            inventoryCanvas.gameObject.SetActive(false);
-            dossierCanvas.gameObject.SetActive(false);
-            endCanvas.gameObject.SetActive(false);
-
-            if (wasCrafting == true)
-            {
-                Debug.Log("GameController.CanvasModeSwitch: wasCrafting's value is " + wasCrafting + " so loading lastActiveStage.");
-
-                crafting.RefreshCraftingUI(crafting.lastActiveStage);
-            }
-            else
-            {
-                Debug.Log("GameController.CanvasModeSwitch: wasCrafting's value is " + wasCrafting + " so loading pickRecipient.");
-
-                crafting.RefreshCraftingUI(crafting.pickRecipient);
-            }
-
-            wasCrafting = false;
         }
         else if (canvasMode == "inventory")
         {
@@ -167,29 +110,12 @@ public class GameController : MonoBehaviour
             Debug.Log("GameController.CanvasModeSwitch: The canvas mode parameter was recognized as inventory.");
 
             inventoryCanvas.gameObject.SetActive(true);
-            craftingCanvas.gameObject.SetActive(false);
             menuCanvas.gameObject.SetActive(false);
             roomCanvas.gameObject.SetActive(false);
             storyCanvas.gameObject.SetActive(false);
-            dossierCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(false);
 
             inventory.UnpackInventory();
-        }
-        else if (canvasMode == "dossier")
-        {
-            canvasState = "dossier";
-            Debug.Log("GameController.CanvasModeSwitch: The canvas mode parameter was recognized as dossier.");
-
-            dossierCanvas.gameObject.SetActive(true);
-            craftingCanvas.gameObject.SetActive(false);
-            menuCanvas.gameObject.SetActive(false);
-            roomCanvas.gameObject.SetActive(false);
-            storyCanvas.gameObject.SetActive(false);
-            inventoryCanvas.gameObject.SetActive(false);
-            endCanvas.gameObject.SetActive(false);
-
-            dossier.UpdateDossier();
         }
         else if (canvasMode == "end")
         {
@@ -199,9 +125,7 @@ public class GameController : MonoBehaviour
             endCanvas.gameObject.SetActive(true);
             menuCanvas.gameObject.SetActive(false);
             roomCanvas.gameObject.SetActive(false);
-            craftingCanvas.gameObject.SetActive(false);
             inventoryCanvas.gameObject.SetActive(false);
-            dossierCanvas.gameObject.SetActive(false);
             storyCanvas.gameObject.SetActive(false);
         }
         else
@@ -325,36 +249,6 @@ public class GameController : MonoBehaviour
             else
             {
                 Debug.Log("GameController.StartInteractablesFade(): storyChoicePanel had a childCount of 0.");
-            }
-        }
-        else if (canvasState == "crafting")
-        {
-            if (craftingChoicePanel.transform.childCount > 0)
-            {
-                Debug.Log("GameController.StartInteractablesFade(): craftingChoicePanel had a childCount greater than 0.");
-
-                foreach (Transform child in craftingChoicePanel.transform)
-                {
-                    Debug.Log("RoomNavigation.StartInteractablesFade(): Addressing text component on object " + child.name);
-
-                    StartCoroutine(FadeInButton(child));
-
-                    if (child.transform.childCount > 0)
-                    {
-                        Debug.Log("GameController.StartInteractablesFade(): " + child + " had a childCount greater than 0.");
-
-                        foreach (Transform textChild in child.transform)
-                        {
-                            Debug.Log("GameController.StartInteractablesFade(): Addressing text component on object " + textChild.name);
-
-                            StartCoroutine(FadeInText(textChild));
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Debug.Log("RoomNavigation.StartInteractablesFade(): craftingChoicePanel had a childCount of 0.");
             }
         }
     }
