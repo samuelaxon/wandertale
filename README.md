@@ -6,3 +6,5 @@ Most content creation can be done via drag and drop and text fields in the Unity
 There is also a basic inventory system and an additional canvas for branching dialogue. Dialogues are scripts made using the Ink scripting language.
 
 To share variables and states between the Unity game and Ink scripts, use VariableTracker.cs. Code is heavily commented to make it relatively easy to pick up and use this but there's not much in the way of documentation, as I made Wandertale as something I can use in my own projects—mostly entries for jams like DOS Game Jam or InkJam.
+
+This was made years ago and if I did it again today there would be a lot I would do differently but it works, so I still use it.
