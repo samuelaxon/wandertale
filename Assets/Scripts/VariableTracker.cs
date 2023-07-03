@@ -10,8 +10,6 @@ public class VariableTracker : MonoBehaviour
     // Scripts
     public GameController controller;
 
-    public Room landingPage;
-
     // Ink story variables
     public int storyEnd = 0;
     public int gameEnd = 0;
@@ -46,9 +44,6 @@ public class VariableTracker : MonoBehaviour
         // NPC conversation levels
         // controller.dossier.gloria.mobState = (int)controller.inkController.story.variablesState["gloriaConversationLevel"];
 
-        // Dossier tracking variables
-        // controller.dossier.gloria.projectHintStage = (int)controller.inkController.story.variablesState["gloriaProjectKnown"];
-
         // Game states
         storyEnd = (int)controller.inkController.story.variablesState["storyEnd"];
         gameEnd = (int)controller.inkController.story.variablesState["gameEnd"];
@@ -61,8 +56,5 @@ public class VariableTracker : MonoBehaviour
 
         // NPC conversation levels
         // controller.inkController.story.variablesState["gloriaConversationLevel"] = controller.dossier.gloria.mobState;
-
-        // Dossier tracking variables
-        // controller.inkController.story.variablesState["gloriaProjectKnown"] = controller.dossier.gloria.projectHintStage;
     }
 }

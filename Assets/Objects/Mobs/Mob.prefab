@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3130094050677868097}
   - component: {fileID: 5265815221808110885}
   m_Layer: 0
-  m_Name: NPC
+  m_Name: Mob
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -43,12 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86be485143b28467f9a8d3215833e816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobName: NPC
+  mobName: Mob
   mobState: 0
-  projectHintStage: 0
-  colorHintStage: 0
-  materialHintStage: 0
-  vesselHintStage: 0
-  inspirationLevel: 0
   mobStories: []
-  mobDescription: An NPC is standing here.
+  mobDescription: A mob is standing here.

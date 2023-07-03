@@ -15,21 +15,21 @@ public class GameController : MonoBehaviour
     public Canvas roomCanvas; // The UI for the room navigation mode.
     public Canvas storyCanvas; // The UI for the Ink story dialogue mode.
     public Canvas menuCanvas; // The UI for the menu.
+    public Canvas inventoryCanvas; // The UI for the inventory view.
     public Canvas endCanvas; // The UI for the kill screen.
-    public Canvas inventoryCanvas;
-    public GameObject interactablesPanel;
-    public GameObject storyChoicePanel;
+    public GameObject interactablesPanel; // The UI panel where interactive text will generate.
+    public GameObject storyChoicePanel; // The UI panel where story choice buttons and text will generate.
 
-    public float fadeSpeed;
+    public float fadeSpeed; // The speed at which UI elements fade in.
 
     public string previousCanvasState; // Stores a canvas state to return to later.
     public string canvasState; // The current mode the canvas is in (story, room, etc).
     public int gameHasStarted = 0; // Has the game started? 0 for no, 1 for yes.
 
-    [HideInInspector] public RoomNavigation roomNavigation; // A reference to roomNavigation for knowing which room we're in.
-    [HideInInspector] public InkController inkController; // A reference to inkController so various scripts can communicate and work with Ink stories.
-    [HideInInspector] public VariableTracker variableTracker; // A reference to variable tracker so various scripts can access, use, and define the variables.
-    [HideInInspector] public Inventory inventory;
+    [HideInInspector] public RoomNavigation roomNavigation; // A reference to RoomNavigation for knowing which room we're in.
+    [HideInInspector] public InkController inkController; // A reference to InkController so various scripts can communicate and work with Ink stories.
+    [HideInInspector] public VariableTracker variableTracker; // A reference to VariableTracker so various scripts can access, use, and define the variables.
+    [HideInInspector] public Inventory inventory; // A reference to the script that contains inventory-related functions.
 
     List<string> roomLog = new List<string>(); // Creates a List of strings called room log that will go to the text field.
 
@@ -53,13 +53,12 @@ public class GameController : MonoBehaviour
                 Debug.Log("GameController.Update(): A key or mouse click has been detected.");
                 gameHasStarted = 1;
 
-                // Enable if we start with a story, not the room view.
+                /* Enable if we start with a story, not the room view.
                 CanvasModeSwitch("story");
-                inkController.LoadStory("Mnemosyne0");
+                inkController.LoadStory("Bob0");*/
 
-                /* Enable if we start with a room, not the story view.
+                // Enable if we start with a room, not the story view.
                 CanvasModeSwitch("room");
-                */
             }
         }
     }
