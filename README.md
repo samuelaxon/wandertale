@@ -1,2 +1,2 @@
-# muse-inc
- A narrative text game about Greek muses.
+# wandertale
+ A Unity-based platform for creating text-based games.
