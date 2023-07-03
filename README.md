@@ -7,4 +7,4 @@ There is also a basic inventory system and an additional canvas for branching di
 
 To share variables and states between the Unity game and Ink scripts, use VariableTracker.cs. Code is heavily commented to make it relatively easy to pick up and use this but there's not much in the way of documentation, as I made Wandertale as something I can use in my own projects—mostly entries for jams like DOS Game Jam or InkJam.
 
-This was made years ago and if I did it again today there would be a lot I would do differently but it works, so I still use it.
+This was made years ago in my early learning days and if I did it again today there would be a lot I would do differently but it works, so I still use it.
