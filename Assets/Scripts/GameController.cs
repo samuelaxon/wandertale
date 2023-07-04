@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Ink.Runtime;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 
@@ -11,6 +10,8 @@ public class GameController : MonoBehaviour
 {
     public TMP_Text roomText; // The TMP room text field.
     public Button quitButton; // The quit button.
+    public Button inventoryButton; // The inventory button.
+    public Button backButton; // The back button.
 
     public Canvas roomCanvas; // The UI for the room navigation mode.
     public Canvas storyCanvas; // The UI for the Ink story dialogue mode.
@@ -63,7 +64,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    // Switches between Story and Room canvas with SetActive. Note for later: Make this into custom enum parameters instead of arbitrary string ones.
+    // Switches between Story and Room canvas with SetActive.
     public void CanvasModeSwitch(string canvasMode)
     {
         Debug.Log("GameController.CanvasModeSwitch() was called.");
@@ -89,6 +90,7 @@ public class GameController : MonoBehaviour
 
             // Tells buttons about the controller when they become active at this point.
             quitButton.GetComponent<ButtonController>().controller = this;
+            inventoryButton.GetComponent<ButtonController>().controller = this;
 
             ChangeRoom();
         }
@@ -113,6 +115,9 @@ public class GameController : MonoBehaviour
             roomCanvas.gameObject.SetActive(false);
             storyCanvas.gameObject.SetActive(false);
             endCanvas.gameObject.SetActive(false);
+
+            // Tells buttons about the controller when they become active at this point.
+            backButton.GetComponent<ButtonController>().controller = this;
 
             inventory.UnpackInventory();
         }
@@ -139,8 +144,8 @@ public class GameController : MonoBehaviour
         Debug.Log("GameController.ChangeRoom() was called.");
 
         roomLog.Clear();
-        roomNavigation.mobOrStaticStoryDictionary.Clear(); // Added while testing new object refactor.
-        roomNavigation.exitDictionary.Clear(); // Added while testing new object refactor.
+        roomNavigation.mobOrStaticStoryDictionary.Clear();
+        roomNavigation.exitDictionary.Clear();
 
         foreach (Transform child in interactablesPanel.transform)
         {
@@ -200,6 +205,7 @@ public class GameController : MonoBehaviour
         roomLog.Add(roomDescriptionToAdd + "\n");
     }
 
+    // Handles fade effect for UI elements.
     public void StartInteractablesFade()
     {
         Debug.Log("GameController.StartInteractablesFade() was called.");

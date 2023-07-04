@@ -3431,6 +3431,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomText: {fileID: 1594779335}
   quitButton: {fileID: 1709547286}
+  inventoryButton: {fileID: 1559064661}
+  backButton: {fileID: 1994742436}
   roomCanvas: {fileID: 125218867}
   storyCanvas: {fileID: 2111413845}
   menuCanvas: {fileID: 102089171}

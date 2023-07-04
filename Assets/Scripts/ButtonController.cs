@@ -13,28 +13,29 @@ public class ButtonController : MonoBehaviour, IPointerClickHandler
     {
         if (gameObject.name == "QuitButton")
         {
-            Debug.Log("ButtonController.OnPointerClick(): Button was clicked and recognized as QuitButton, the application will quit.");
+            Debug.Log("ButtonController.OnPointerClick(): Button was clicked and recognized as QuitButton, quitting application.");
             Application.Quit();
         }
         else if (gameObject.name == "RestartButton")
         {
-            Debug.Log("ButtonController.OnPointerClick(): Button was clicked and recognized as RestartButton, the scene will reload.");
+            Debug.Log("ButtonController.OnPointerClick(): Button was clicked and recognized as RestartButton, reloading scene.");
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         else if (gameObject.name == "InventoryButton")
         {
+            Debug.Log("ButtonController.OnPointerClick(): Button was clicked and recognized as InventoryButton, loading inventory canvas.");
             controller.previousCanvasState = controller.canvasState;
             controller.CanvasModeSwitch("inventory");
         }
         else if (gameObject.name == "BackButton")
         {
-            Debug.Log("ButtonController.OnPointerClick(): Back button pressed, returning to previousCanvasState " + controller.previousCanvasState);
+            Debug.Log("ButtonController.OnPointerClick(): Button was clicked and recognized as BackButton, returning to previousCanvasState " + controller.previousCanvasState);
 
             controller.CanvasModeSwitch(controller.previousCanvasState);
         }
         else
         {
-            Debug.Log("ButtonController.OnPointerClick(): Button click detected, but button name did not match known button.");
+            Debug.Log("ButtonController.OnPointerClick(): Button was clicked and button name was unknown.");
         }
     }
 }
