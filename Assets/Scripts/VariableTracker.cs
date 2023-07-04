@@ -45,7 +45,7 @@ public class VariableTracker : MonoBehaviour
     {
         Debug.Log("VariableTracker/UpdateVariablesFromStoryEnd() was called.");
 
-        // NPC conversation levels
+        // Mob states
         bob.mobState = (int)controller.inkController.story.variablesState["bobConversationLevel"];
 
         // Game states
@@ -58,7 +58,7 @@ public class VariableTracker : MonoBehaviour
     {
         Debug.Log("VariableTracker/SendNewVariablesToStory() was called.");
 
-        // NPC conversation levels
+        // Mob states
         controller.inkController.story.variablesState["bobConversationLevel"] = bob.mobState;
     }
 }
