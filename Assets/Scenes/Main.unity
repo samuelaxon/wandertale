@@ -555,7 +555,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4289682957
-  m_fontColor: {r: 0.050980393, g: 0.36862746, b: 0.6862745, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2097,7 +2097,7 @@ PrefabInstance:
     - target: {fileID: 5265815221808110885, guid: 681e003448f0946c4b9af498f725e51e,
         type: 3}
       propertyPath: mobDescription
-      value: Bob is standing here.
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5265815221808110885, guid: 681e003448f0946c4b9af498f725e51e,
         type: 3}
@@ -2116,18 +2116,23 @@ PrefabInstance:
       objectReference: {fileID: 4900000, guid: 9aa596e1c248e4eb4a4196142b2d55db, type: 3}
     - target: {fileID: 5265815221808110885, guid: 681e003448f0946c4b9af498f725e51e,
         type: 3}
+      propertyPath: mobStories.Array.data[2].valueStory
+      value: 
+      objectReference: {fileID: 4900000, guid: e679cc4dfe289480b9685998de0375bb, type: 3}
+    - target: {fileID: 5265815221808110885, guid: 681e003448f0946c4b9af498f725e51e,
+        type: 3}
       propertyPath: mobStories.Array.data[0].dialogueDescription
       value: Some guy named Bob is standing here.
       objectReference: {fileID: 0}
     - target: {fileID: 5265815221808110885, guid: 681e003448f0946c4b9af498f725e51e,
         type: 3}
       propertyPath: mobStories.Array.data[1].dialogueDescription
-      value: Bob is still here, trying to ignore you.
+      value: Bob is still here.
       objectReference: {fileID: 0}
     - target: {fileID: 5265815221808110885, guid: 681e003448f0946c4b9af498f725e51e,
         type: 3}
       propertyPath: mobStories.Array.data[2].dialogueDescription
-      value: Bob is here giving off conclusive "don't bother me" vibes.
+      value: Bob is ignoring you.
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2225,7 +2230,7 @@ PrefabInstance:
     - target: {fileID: 6111506476621736668, guid: c9bc6fe9ba18e8a45b298938c58e61e5,
         type: 3}
       propertyPath: statics.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6111506476621736668, guid: c9bc6fe9ba18e8a45b298938c58e61e5,
         type: 3}
@@ -2732,7 +2737,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4289682957
-  m_fontColor: {r: 0.050980393, g: 0.36862746, b: 0.6862745, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3488,6 +3493,7 @@ MonoBehaviour:
   controller: {fileID: 2012959956}
   storyEnd: 0
   gameEnd: 0
+  bob: {fileID: 1304104941}
   masterStoryList: []
 --- !u!114 &2012959960
 MonoBehaviour:

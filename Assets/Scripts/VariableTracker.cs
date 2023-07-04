@@ -14,6 +14,10 @@ public class VariableTracker : MonoBehaviour
     public int storyEnd = 0;
     public int gameEnd = 0;
 
+    // Mobs
+
+    public Mob bob;
+
     public List<TextAsset> masterStoryList = new List<TextAsset>();
     [HideInInspector] public Dictionary<string, TextAsset> masterStoryDictionary = new Dictionary<string, TextAsset>();
 
@@ -42,7 +46,7 @@ public class VariableTracker : MonoBehaviour
         Debug.Log("VariableTracker/UpdateVariablesFromStoryEnd() was called.");
 
         // NPC conversation levels
-        // controller.dossier.gloria.mobState = (int)controller.inkController.story.variablesState["gloriaConversationLevel"];
+        bob.mobState = (int)controller.inkController.story.variablesState["bobConversationLevel"];
 
         // Game states
         storyEnd = (int)controller.inkController.story.variablesState["storyEnd"];
@@ -55,6 +59,6 @@ public class VariableTracker : MonoBehaviour
         Debug.Log("VariableTracker/SendNewVariablesToStory() was called.");
 
         // NPC conversation levels
-        // controller.inkController.story.variablesState["gloriaConversationLevel"] = controller.dossier.gloria.mobState;
+        controller.inkController.story.variablesState["bobConversationLevel"] = bob.mobState;
     }
 }
